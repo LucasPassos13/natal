@@ -7,14 +7,106 @@
     <style>
         body {
             font-family: Arial, sans-serif;
+            margin: 0;
+            overflow: hidden;
+            background-color: #f2f2f2;
+            background-image: url("image%20(15).png"); /* Verifique a URL da imagem */
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
-            background-color: #f2f2f2;
-            background-image: url("image\ \(15\).png");
-            margin: 0;
         }
+
+        .splash-screen {
+            position: fixed;
+            width: 100%;
+            height: 100vh;
+            background-color: #e79494;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            opacity: 1;
+            transition: opacity 1s ease-out;
+        }
+
+        .loader-container {
+            position: relative;
+            width: 200px;
+            height: 200px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .loader {
+            width: 150px;
+            height: 150px;
+            border: 8px solid #ff4d4d;
+            border-top: 8px solid transparent;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            position: absolute;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .splash-text {
+            position: absolute;
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #ff4d4d;
+        }
+
+        .top-text, .bottom-text {
+            position: absolute;
+            width: 100%;
+            text-align: center;
+        }
+
+        .top-text {
+            top: -60px;
+            transform: rotate(-15deg);
+        }
+
+        .bottom-text {
+            bottom: -60px;
+            transform: rotate(15deg);
+        }
+
+        .splash-image {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            position: absolute;
+        }
+
+        .curved-text {
+            position: absolute;
+            width: 100%;
+            text-align: center;
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #ff4d4d;
+        }
+
+        .svg-text {
+            position: absolute;
+            width: 200px;
+            height: 200px;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .main-content {
+            display: none;
+            text-align: center;
+        }
+
         .counter {
             text-align: center;
             background-color: #ff4d4d;
@@ -23,67 +115,137 @@
             color: white;
             width: 350px;
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
         }
+
         .days {
             font-size: 2.5em;
             font-weight: bold;
         }
+
         .time {
             display: flex;
             justify-content: space-between;
             margin-top: 20px;
             font-size: 1.5em;
         }
+
         .time div {
             display: inline-block;
             width: 70px;
             text-align: center;
         }
+
         .time span {
             display: block;
             font-size: 1.2em;
             margin-top: 5px;
         }
-        p {
+
+        .buttons-container {
+            margin-top: 30px;
+        }
+
+        .button {
+            background-color: #ff4d4d;
+            color: white;
+            padding: 15px 30px;
             font-size: 1.2em;
-            margin-top: 10px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            margin: 10px;
+            transition: background-color 0.3s ease;
+        }
+
+        .button:hover {
+            background-color: #e63946;
+        }
+
+        .back-button {
+            background-color: #2d2d2d;
+            color: white;
+            padding: 10px 20px;
+            font-size: 1em;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+
+        .back-button:hover {
+            background-color: #444;
         }
     </style>
 </head>
 <body>
 
-<div class="counter">
-    <h2>Contagem regressiva para o Natal.</h2>
-    <p>Faltam</p>
-    <div class="days" id="days"></div>
-    <div class="time">
-        <div>
-            <span id="hours"></span>
-            <span>Hrs.</span>
+<!-- Splash Screen -->
+<div class="splash-screen">
+    <div class="loader-container">
+        <svg class="svg-text">
+            <defs>
+                <path id="curve" d="M 50,100 A 50,50 0 1,1 150,100 A 50,50 0 1,1 50,100" fill="transparent" />
+            </defs>
+            <text width="200">
+                <textPath xlink:href="#curve" startOffset="10%">Que Loucura!</textPath>
+            </text>
+            <text width="200">
+                <textPath xlink:href="#curve" startOffset="50%">Calendário Evandro</textPath>
+            </text>
+        </svg>
+        <div class="loader"></div>
+        <img src="1726162136188.jpg" class="splash-image" alt="Logo do Calendário Evandro">
+    </div>
+</div>
+
+<!-- Conteúdo Principal -->
+<div class="main-content">
+    <div class="buttons-container" id="buttons-container">
+        <button class="button" id="btn-natal">Natal</button>
+        <button class="button" id="btn-pascoa">Páscoa</button>
+        <button class="button" id="btn-crianca">Dia das Crianças</button>
+        <button class="button" id="btn-junina">Festa Junina</button>
+        <button class="button" id="btn-sampa">Sampa Crew</button>
+        <button class="button" id="btn-pacote">Pacote Expedição</button>
+    </div>
+
+    <!-- Contador de Natal -->
+    <div class="counter" id="natal-counter" style="display: none;">
+        <h2>Contagem regressiva para o Natal.</h2>
+        <p>Faltam</p>
+        <div class="days" id="days"></div>
+        <div class="time">
+            <div>
+                <span id="hours"></span>
+                <span>Hrs.</span>
+            </div>
+            <div>
+                <span id="minutes"></span>
+                <span>Min.</span>
+            </div>
+            <div>
+                <span id="seconds"></span>
+                <span>Seg.</span>
+            </div>
         </div>
-        <div>
-            <span id="minutes"></span>
-            <span>Min.</span>
-        </div>
-        <div>
-            <span id="seconds"></span>
-            <span>Seg.</span>
-        </div>
+        <button class="back-button" id="back-to-buttons">Voltar</button>
     </div>
 </div>
 
 <script>
     function updateCounter() {
         const today = new Date();
-        const christmas = new Date(today.getFullYear(), 11, 25); // 25 de dezembro
+        const christmas = new Date(today.getFullYear(), 11, 25);
 
         if (today > christmas) {
-            christmas.setFullYear(today.getFullYear() + 1); // Se já passou do Natal, conta para o próximo ano
+            christmas.setFullYear(today.getFullYear() + 1);
         }
 
         const timeDiff = christmas - today;
-
-        // Calcula os dias, horas, minutos e segundos restantes
         const daysRemaining = Math.floor(timeDiff / (1000 * 60 * 60 * 24));
         const hoursRemaining = Math.floor((timeDiff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
         const minutesRemaining = Math.floor((timeDiff % (1000 * 60 * 60)) / (1000 * 60));
@@ -95,11 +257,49 @@
         document.getElementById("seconds").textContent = secondsRemaining < 10 ? "0" + secondsRemaining : secondsRemaining;
     }
 
-    // Atualiza o contador a cada segundo
     setInterval(updateCounter, 1000);
-
-    // Atualiza o contador imediatamente ao carregar a página
     updateCounter();
+
+    setTimeout(() => {
+        document.querySelector('.splash-screen').style.opacity = '0';
+        setTimeout(() => {
+            document.querySelector('.splash-screen').style.display = 'none';
+            document.querySelector('.main-content').style.display = 'block';
+        }, 1000);
+    }, 3000);
+
+    // Mostrar o contador de Natal quando o botão de Natal for clicado
+    document.getElementById("btn-natal").addEventListener("click", function() {
+        document.getElementById("buttons-container").style.display = "none";
+        document.getElementById("natal-counter").style.display = "block";
+    });
+    
+    // Lógica do botão "Voltar para os botões"
+    document.getElementById("back-to-buttons").addEventListener("click", function() {
+        document.getElementById("natal-counter").style.display = "none";
+        document.getElementById("buttons-container").style.display = "block";
+    });
+
+    // Outros botões (adicionar lógicas similares conforme necessário)
+    document.getElementById("btn-pascoa").addEventListener("click", function() {
+        alert("Contador da Páscoa");
+    });
+    
+    document.getElementById("btn-pacote").addEventListener("click", function() {
+        alert("Pacote Expedição");
+    });
+
+    document.getElementById("btn-crianca").addEventListener("click", function() {
+        alert("Em contrução");
+    });
+
+    document.getElementById("btn-junina").addEventListener("click", function() {
+        alert("Em contrução");
+    });
+
+    document.getElementById("btn-sampa").addEventListener("click", function() {
+        alert("Em contrução");
+    });
 </script>
 
 </body>
