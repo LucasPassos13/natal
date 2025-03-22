@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Calendário Evandro</title>
     <style>
-          body {
+           body {
             font-family: Arial, sans-serif;
             margin: 0;
             overflow: hidden;
@@ -63,7 +63,7 @@
             height: 50px;
             border-radius: 50%; /* Imagem redonda */
             margin-bottom: 10px; /* Espaço entre a imagem e a frase */
-        }   
+        }
 
         /* Estilo da frase */
         .like-feedback .que-loucura {
@@ -441,17 +441,23 @@
 <script>
 
    // Variável para armazenar o número de likes
-   let likeCount = 0;
+   let likeCount = localStorage.getItem('likeCount') ? parseInt(localStorage.getItem('likeCount')) : 0;
 
     // Elementos do DOM
     const likeCountElement = document.getElementById('like-count');
     const likeButton = document.getElementById('like-button');
     const likeFeedbackElement = document.getElementById('like-feedback');
 
+    // Atualiza o contador de likes ao carregar a página
+    likeCountElement.textContent = likeCount;
+
     // Função para atualizar o contador de likes
     function updateLikeCount() {
         likeCount++;
         likeCountElement.textContent = likeCount;
+
+        // Salva o número de likes no localStorage
+        localStorage.setItem('likeCount', likeCount);
 
         // Exibe o feedback (imagem e frase)
         likeFeedbackElement.classList.add('show');
