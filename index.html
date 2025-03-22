@@ -3,19 +3,80 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Contador para o Natal</title>
+    <title>Calendário Evandro</title>
     <style>
-        body {
+          body {
             font-family: Arial, sans-serif;
             margin: 0;
             overflow: hidden;
             background-color: #f2f2f2;
-            background-image: url("image%20(15).png"); /* Verifique a URL da imagem */
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
+            position: relative;
         }
+
+        /* Rodapé com o contador de likes */
+        footer {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background-color: #ff4d4d;
+            color: white;
+            text-align: center;
+            padding: 10px;
+            font-size: 1.2em;
+            z-index: 1000;
+        }
+
+        /* Estilo do botão de like */
+        .like-button {
+            background-color: transparent;
+            border: none;
+            cursor: pointer;
+            font-size: 1.5em;
+            color: white;
+            transition: transform 0.2s ease;
+        }
+
+        .like-button:hover {
+            transform: scale(1.2); /* Efeito de zoom ao passar o mouse */
+        }
+
+        /* Container para a imagem e a frase */
+        .like-feedback {
+            position: fixed;
+            bottom: 60px; /* Posiciona acima do rodapé */
+            left: 50%;
+            transform: translateX(-50%);
+            text-align: center;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+            pointer-events: none; /* Impede que a frase e a imagem interfiram com cliques */
+        }
+
+        /* Estilo da imagem */
+        .like-feedback img {
+            width: 50px; /* Tamanho da imagem */
+            height: 50px;
+            border-radius: 50%; /* Imagem redonda */
+            margin-bottom: 10px; /* Espaço entre a imagem e a frase */
+        }   
+
+        /* Estilo da frase */
+        .like-feedback .que-loucura {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #ff4d4d;
+        }
+
+        /* Classe para mostrar o feedback */
+        .like-feedback.show {
+            opacity: 1; /* Torna o feedback visível */
+        }
+
 
         .splash-screen {
             position: fixed;
@@ -105,6 +166,7 @@
         .main-content {
             display: none;
             text-align: center;
+            color: white;
         }
 
         .counter {
@@ -179,6 +241,15 @@
         .back-button:hover {
             background-color: #444;
         }
+        .target-date {
+            font-size: 1.2em;
+            margin-top: 10px;
+            color: white;;
+        }
+
+        #h1{
+            color: #ff4d4d;
+        }
     </style>
 </head>
 <body>
@@ -204,13 +275,16 @@
 
 <!-- Conteúdo Principal -->
 <div class="main-content">
+    
     <div class="buttons-container" id="buttons-container">
+        <h1 id="h1">Confira as datas mais importantes do ano</h1>
         <button class="button" id="btn-natal">Natal</button>
         <button class="button" id="btn-pascoa">Páscoa</button>
         <button class="button" id="btn-crianca">Dia das Crianças</button>
-        <button class="button" id="btn-junina">Festa Junina</button>
         <button class="button" id="btn-sampa">Sampa Crew</button>
+        <button class="button" id="btn-santos">Aniversario do Santos</button>
         <button class="button" id="btn-pacote">Pacote Expedição</button>
+        <button class="button" id="btn-evandro">Evandro Day</button>
     </div>
 
     <!-- Contador de Natal -->
@@ -234,10 +308,164 @@
         </div>
         <button class="back-button" id="back-to-buttons">Voltar</button>
     </div>
+     <!-- Contador de Santos -->
+     <div class="counter" id="santos-counter" style="display: none;">
+        <h2>Aniversário do Peixão.</h2>
+        <p>Faltam</p>
+        <div class="days" id="days-santos"></div>
+        <div class="time">
+            <div>
+                <span id="hours-santos"></span>
+                <span>Hrs.</span>
+            </div>
+            <div>
+                <span id="minutes-santos"></span>
+                <span>Min.</span>
+            </div>
+            <div>
+                <span id="seconds-santos"></span>
+                <span>Seg.</span>
+            </div>
+        </div>
+        <button class="back-button" id="back-to-buttons-santos">Voltar</button>
+    </div>
+      <!-- Contador de Páscoa -->
+    <div class="counter" id="pascoa-counter" style="display: none;">
+        <h2>Contagem regressiva para a Páscoa.</h2>
+        <p>Faltam</p>
+        <div class="days" id="days-pascoa"></div>
+        <div class="time">
+            <div>
+                <span id="hours-pascoa"></span>
+                <span>Hrs.</span>
+            </div>
+            <div>
+                <span id="minutes-pascoa"></span>
+                <span>Min.</span>
+            </div>
+            <div>
+                <span id="seconds-pascoa"></span>
+                <span>Seg.</span>
+            </div>
+        </div>
+        <button class="back-button" id="back-to-buttons-pascoa">Voltar</button>
+    </div>
+    <!-- Contador do Dia das Crianças -->
+    <div class="counter" id="crianca-counter" style="display: none;">
+        <h2>Contagem regressiva para o Dia das Crianças.</h2>
+        <p>Faltam</p>
+        <div class="days" id="days-crianca"></div>
+        <div class="time">
+            <div>
+                <span id="hours-crianca"></span>
+                <span>Hrs.</span>
+            </div>
+            <div>
+                <span id="minutes-crianca"></span>
+                <span>Min.</span>
+            </div>
+            <div>
+                <span id="seconds-crianca"></span>
+                <span>Seg.</span>
+            </div>
+        </div>
+        <button class="back-button" id="back-to-buttons-crianca">Voltar</button>
+    </div>
+
+    <!-- Contador do Evandro Day -->
+    <div class="counter" id="evandro-counter" style="display: none;">
+        <h2>Contagem regressiva para o Evandro Day.</h2>
+        <p>Faltam</p>
+        <div class="days" id="days-evandro"></div>
+        <div class="time">
+            <div>
+                <span id="hours-evandro"></span>
+                <span>Hrs.</span>
+            </div>
+            <div>
+                <span id="minutes-evandro"></span>
+                <span>Min.</span>
+            </div>
+            <div>
+                <span id="seconds-evandro"></span>
+                <span>Seg.</span>
+            </div>
+        </div>
+        <p class="target-date" id="target-date-evandro"></p>
+        <button class="back-button" id="back-to-buttons-evandro">Voltar</button>
+    </div>
+
+    <!-- Contador do Pacote de Expedição -->
+    <div class="counter" id="pacote-counter" style="display: none;">
+        <h2>Contagem regressiva para o próximo Pacote de Expedição.</h2>
+        <p>Faltam</p>
+        <div class="days" id="days-pacote"></div>
+        <div class="time">
+            <div>
+                <span id="hours-pacote"></span>
+                <span>Hrs.</span>
+            </div>
+            <div>
+                <span id="minutes-pacote"></span>
+                <span>Min.</span>
+            </div>
+            <div>
+                <span id="seconds-pacote"></span>
+                <span>Seg.</span>
+            </div>
+        </div>
+        <p class="target-date" id="target-date-pacote"></p>
+        <button class="back-button" id="back-to-buttons-pacote">Voltar</button>
+    </div>
+
+    <!-- Agenda Sampa Crew -->
+    <div class="counter" id="sampa-counter" style="display: none;">
+        <h2>Só o Evandro sabe quando será o proximo show</h2>
+        
+        
+        <button class="back-button" id="back-to-buttons-sampa">Voltar</button>
+    </div>
+</div>
+
+<footer>
+    <span id="like-count">0</span> curtidas
+    <button class="like-button" id="like-button">❤️</button>
+</footer>
+
+<!-- Container para a imagem e a frase -->
+<div class="like-feedback" id="like-feedback">
+    <img src="1726162136188.jpg" alt="Imagem de feedback">
+    <div class="que-loucura">Que Loucura!</div>
 </div>
 
 <script>
-    function updateCounter() {
+
+   // Variável para armazenar o número de likes
+   let likeCount = 0;
+
+    // Elementos do DOM
+    const likeCountElement = document.getElementById('like-count');
+    const likeButton = document.getElementById('like-button');
+    const likeFeedbackElement = document.getElementById('like-feedback');
+
+    // Função para atualizar o contador de likes
+    function updateLikeCount() {
+        likeCount++;
+        likeCountElement.textContent = likeCount;
+
+        // Exibe o feedback (imagem e frase)
+        likeFeedbackElement.classList.add('show');
+
+        // Remove o feedback após 2 segundos
+        setTimeout(() => {
+            likeFeedbackElement.classList.remove('show');
+        }, 2000);
+    }
+
+    // Adiciona o evento de clique ao botão de like
+    likeButton.addEventListener('click', updateLikeCount);
+
+    function updateCounterNatal() {
         const today = new Date();
         const christmas = new Date(today.getFullYear(), 11, 25);
 
@@ -257,8 +485,194 @@
         document.getElementById("seconds").textContent = secondsRemaining < 10 ? "0" + secondsRemaining : secondsRemaining;
     }
 
-    setInterval(updateCounter, 1000);
-    updateCounter();
+     // Função para mostrar a imagem de fundo do Natal
+     function showNatalBackground() {
+        document.body.classList.add('show-natal-background'); // Adiciona a classe para mostrar o fundo
+    }
+
+    // Função para remover a imagem de fundo do Natal
+    function hideNatalBackground() {
+        document.body.classList.remove('show-natal-background'); // Remove a classe para esconder o fundo
+    }
+
+    // Mostrar o contador de Natal quando o botão de Natal for clicado
+    document.getElementById("btn-natal").addEventListener("click", function() {
+        document.getElementById("buttons-container").style.display = "none";
+        document.getElementById("natal-counter").style.display = "block";
+        showNatalBackground(); // Exibe a imagem de fundo do Natal
+    });
+    
+    // Lógica do botão "Voltar para os botões"
+    document.getElementById("back-to-buttons").addEventListener("click", function() {
+        document.getElementById("natal-counter").style.display = "none";
+        document.getElementById("buttons-container").style.display = "block";
+        hideNatalBackground(); // Remove a imagem de fundo do Natal
+    });
+    
+    // Lógica do botão "Voltar para os botões"
+    document.getElementById("back-to-buttons").addEventListener("click", function() {
+        document.getElementById("natal-counter").style.display = "none";
+        document.getElementById("buttons-container").style.display = "block";
+        hideNatalBackground(); // Remove a imagem de fundo do Natal
+    });
+
+    function updateCounterSantos() {
+        const today = new Date();
+        const santos = new Date(today.getFullYear(), 3, 14);
+
+        if (today > santos) {
+            santos.setFullYear(today.getFullYear() + 1);
+        }
+
+        const timeDiff = santos - today;
+        const daysRemaining = Math.floor(timeDiff / (1000 * 60 * 60 * 24));
+        const hoursRemaining = Math.floor((timeDiff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const minutesRemaining = Math.floor((timeDiff % (1000 * 60 * 60)) / (1000 * 60));
+        const secondsRemaining = Math.floor((timeDiff % (1000 * 60)) / 1000);
+
+        document.getElementById("days-santos").textContent = daysRemaining + " dias";
+        document.getElementById("hours-santos").textContent = hoursRemaining < 10 ? "0" + hoursRemaining : hoursRemaining;
+        document.getElementById("minutes-santos").textContent = minutesRemaining < 10 ? "0" + minutesRemaining : minutesRemaining;
+        document.getElementById("seconds-santos").textContent = secondsRemaining < 10 ? "0" + secondsRemaining : secondsRemaining;
+    }
+
+    function updateCounterPascoa() {
+        const today = new Date();
+        const pascoa = getPascoaDate(today.getFullYear());
+
+        if (today > pascoa) {
+            pascoa.setFullYear(today.getFullYear() + 1);
+        }
+
+        const timeDiff = pascoa - today;
+        const daysRemaining = Math.floor(timeDiff / (1000 * 60 * 60 * 24));
+        const hoursRemaining = Math.floor((timeDiff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const minutesRemaining = Math.floor((timeDiff % (1000 * 60 * 60)) / (1000 * 60));
+        const secondsRemaining = Math.floor((timeDiff % (1000 * 60)) / 1000);
+
+        document.getElementById("days-pascoa").textContent = daysRemaining + " dias";
+        document.getElementById("hours-pascoa").textContent = hoursRemaining < 10 ? "0" + hoursRemaining : hoursRemaining;
+        document.getElementById("minutes-pascoa").textContent = minutesRemaining < 10 ? "0" + minutesRemaining : minutesRemaining;
+        document.getElementById("seconds-pascoa").textContent = secondsRemaining < 10 ? "0" + secondsRemaining : secondsRemaining;
+    }
+
+    function updateCounterCrianca() {
+        const today = new Date();
+        const crianca = new Date(today.getFullYear(), 9, 12); // 12 de outubro
+
+        if (today > crianca) {
+            crianca.setFullYear(today.getFullYear() + 1);
+        }
+
+        const timeDiff = crianca - today;
+        const daysRemaining = Math.floor(timeDiff / (1000 * 60 * 60 * 24));
+        const hoursRemaining = Math.floor((timeDiff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const minutesRemaining = Math.floor((timeDiff % (1000 * 60 * 60)) / (1000 * 60));
+        const secondsRemaining = Math.floor((timeDiff % (1000 * 60)) / 1000);
+
+        document.getElementById("days-crianca").textContent = daysRemaining + " dias";
+        document.getElementById("hours-crianca").textContent = hoursRemaining < 10 ? "0" + hoursRemaining : hoursRemaining;
+        document.getElementById("minutes-crianca").textContent = minutesRemaining < 10 ? "0" + minutesRemaining : minutesRemaining;
+        document.getElementById("seconds-crianca").textContent = secondsRemaining < 10 ? "0" + secondsRemaining : secondsRemaining;
+    }
+
+    function updateCounterEvandro() {
+        const today = new Date();
+        const evandroDay = new Date(today.getFullYear(), 3, 21); // 21 de abril
+
+        if (today > evandroDay) {
+            evandroDay.setFullYear(today.getFullYear() + 1);
+        }
+
+        const timeDiff = evandroDay - today;
+        const daysRemaining = Math.floor(timeDiff / (1000 * 60 * 60 * 24));
+        const hoursRemaining = Math.floor((timeDiff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const minutesRemaining = Math.floor((timeDiff % (1000 * 60 * 60)) / (1000 * 60));
+        const secondsRemaining = Math.floor((timeDiff % (1000 * 60)) / 1000);
+
+        document.getElementById("days-evandro").textContent = daysRemaining + " dias";
+        document.getElementById("hours-evandro").textContent = hoursRemaining < 10 ? "0" + hoursRemaining : hoursRemaining;
+        document.getElementById("minutes-evandro").textContent = minutesRemaining < 10 ? "0" + minutesRemaining : minutesRemaining;
+        document.getElementById("seconds-evandro").textContent = secondsRemaining < 10 ? "0" + secondsRemaining : secondsRemaining;
+
+        // Exibir a data alvo
+        const options = { year: 'numeric', month: 'long', day: 'numeric' };
+        document.getElementById("target-date-evandro").textContent =  evandroDay.toLocaleDateString('pt-BR', options);
+    }
+
+    function updateCounterPacote() {
+        const today = new Date();
+        const pacoteDates = [
+            new Date(2025, 3, 25), // 25/04/2025
+            new Date(2025, 4, 21), // 21/05/2025
+            new Date(2025, 5, 25), // 25/06/2025
+            new Date(2025, 6, 23), // 23/07/2025
+            new Date(2025, 7, 27), // 27/08/2025
+            new Date(2025, 8, 24), // 24/09/2025
+            new Date(2025, 10, 24), // 24/11/2025
+            new Date(2025, 11, 17)  // 17/12/2025
+        ];
+
+        let nextDate = null;
+        for (const date of pacoteDates) {
+            if (date > today) {
+                nextDate = date;
+                break;
+            }
+        }
+
+        if (!nextDate) {
+            nextDate = pacoteDates[0]; // Se todas as datas já passaram, volta para a primeira do próximo ano
+            nextDate.setFullYear(today.getFullYear() + 1);
+        }
+
+        const timeDiff = nextDate - today;
+        const daysRemaining = Math.floor(timeDiff / (1000 * 60 * 60 * 24));
+        const hoursRemaining = Math.floor((timeDiff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const minutesRemaining = Math.floor((timeDiff % (1000 * 60 * 60)) / (1000 * 60));
+        const secondsRemaining = Math.floor((timeDiff % (1000 * 60)) / 1000);
+
+        document.getElementById("days-pacote").textContent = daysRemaining + " dias";
+        document.getElementById("hours-pacote").textContent = hoursRemaining < 10 ? "0" + hoursRemaining : hoursRemaining;
+        document.getElementById("minutes-pacote").textContent = minutesRemaining < 10 ? "0" + minutesRemaining : minutesRemaining;
+        document.getElementById("seconds-pacote").textContent = secondsRemaining < 10 ? "0" + secondsRemaining : secondsRemaining;
+
+        // Exibir a data alvo
+        const options = { year: 'numeric', month: 'long', day: 'numeric' };
+        document.getElementById("target-date-pacote").textContent = nextDate.toLocaleDateString('pt-BR', options);
+    }
+
+    function getPascoaDate(year) {
+        const a = year % 19;
+        const b = Math.floor(year / 100);
+        const c = year % 100;
+        const d = Math.floor(b / 4);
+        const e = b % 4;
+        const f = Math.floor((b + 8) / 25);
+        const g = Math.floor((b - f + 1) / 3);
+        const h = (19 * a + b - d - g + 15) % 30;
+        const i = Math.floor(c / 4);
+        const k = c % 4;
+        const l = (32 + 2 * e + 2 * i - h - k) % 7;
+        const m = Math.floor((a + 11 * h + 22 * l) / 451);
+        const month = Math.floor((h + l - 7 * m + 114) / 31);
+        const day = ((h + l - 7 * m + 114) % 31) + 1;
+
+        return new Date(year, month - 1, day);
+    }
+
+    setInterval(updateCounterNatal, 1000);
+    updateCounterNatal();
+    setInterval(updateCounterSantos, 1000);
+    updateCounterSantos();
+    setInterval(updateCounterPascoa, 1000);
+    updateCounterPascoa();
+    setInterval(updateCounterCrianca, 1000);
+    updateCounterCrianca();
+    setInterval(updateCounterEvandro, 1000);
+    updateCounterEvandro();
+    setInterval(updateCounterPacote, 1000);
+    updateCounterPacote();
 
     setTimeout(() => {
         document.querySelector('.splash-screen').style.opacity = '0';
@@ -280,25 +694,70 @@
         document.getElementById("buttons-container").style.display = "block";
     });
 
-    // Outros botões (adicionar lógicas similares conforme necessário)
-    document.getElementById("btn-pascoa").addEventListener("click", function() {
-        alert("Contador da Páscoa");
+    document.getElementById("btn-santos").addEventListener("click", function() {
+        document.getElementById("buttons-container").style.display = "none";
+        document.getElementById("santos-counter").style.display = "block";
     });
     
-    document.getElementById("btn-pacote").addEventListener("click", function() {
-        alert("Pacote Expedição");
+    // Lógica do botão "Voltar para os botões"
+    document.getElementById("back-to-buttons-santos").addEventListener("click", function() {
+        document.getElementById("santos-counter").style.display = "none";
+        document.getElementById("buttons-container").style.display = "block";
+    });
+
+    document.getElementById("btn-pascoa").addEventListener("click", function() {
+        document.getElementById("buttons-container").style.display = "none";
+        document.getElementById("pascoa-counter").style.display = "block";
+    });
+    
+    // Lógica do botão "Voltar para os botões"
+    document.getElementById("back-to-buttons-pascoa").addEventListener("click", function() {
+        document.getElementById("pascoa-counter").style.display = "none";
+        document.getElementById("buttons-container").style.display = "block";
     });
 
     document.getElementById("btn-crianca").addEventListener("click", function() {
-        alert("Em contrução");
+        document.getElementById("buttons-container").style.display = "none";
+        document.getElementById("crianca-counter").style.display = "block";
+    });
+    
+    // Lógica do botão "Voltar para os botões"
+    document.getElementById("back-to-buttons-crianca").addEventListener("click", function() {
+        document.getElementById("crianca-counter").style.display = "none";
+        document.getElementById("buttons-container").style.display = "block";
     });
 
-    document.getElementById("btn-junina").addEventListener("click", function() {
-        alert("Em contrução");
+    document.getElementById("btn-evandro").addEventListener("click", function() {
+        document.getElementById("buttons-container").style.display = "none";
+        document.getElementById("evandro-counter").style.display = "block";
+    });
+    
+    // Lógica do botão "Voltar para os botões"
+    document.getElementById("back-to-buttons-evandro").addEventListener("click", function() {
+        document.getElementById("evandro-counter").style.display = "none";
+        document.getElementById("buttons-container").style.display = "block";
     });
 
+    document.getElementById("btn-pacote").addEventListener("click", function() {
+        document.getElementById("buttons-container").style.display = "none";
+        document.getElementById("pacote-counter").style.display = "block";
+    });
+    
+    // Lógica do botão "Voltar para os botões"
+    document.getElementById("back-to-buttons-pacote").addEventListener("click", function() {
+        document.getElementById("pacote-counter").style.display = "none";
+        document.getElementById("buttons-container").style.display = "block";
+    });
+
+    // Outros botões (adicionar lógicas similares conforme necessário)
     document.getElementById("btn-sampa").addEventListener("click", function() {
-        alert("Em contrução");
+        document.getElementById("buttons-container").style.display = "none";
+        document.getElementById("sampa-counter").style.display = "block";
+    });
+
+    document.getElementById("back-to-buttons-sampa").addEventListener("click", function() {
+        document.getElementById("sampa-counter").style.display = "none";
+        document.getElementById("buttons-container").style.display = "block";
     });
 </script>
 
